@@ -1,0 +1,1 @@
+A simple bot template for developing kotlin discord bots using JDA
