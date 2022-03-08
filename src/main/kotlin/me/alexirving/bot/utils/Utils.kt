@@ -4,6 +4,9 @@ import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption
+import java.sql.Connection
+import java.sql.DriverManager
+import java.sql.ResultSet
 
 val fileValid = Regex(".+\\..+")
 
@@ -25,3 +28,8 @@ fun copyOver(vararg names: String) {
             File(name).mkdirs()
     }
 }
+
+fun getDb(): Connection = DriverManager.getConnection("jdbc:sqlite:database.db")
+
+fun psExec(statement: String) = getDb().prepareStatement(statement).execute()
+fun psQuery(statement: String): ResultSet = getDb().prepareStatement(statement).executeQuery()

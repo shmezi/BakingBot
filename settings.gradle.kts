@@ -1,2 +1,2 @@
-rootProject.name = "BotTemplate"
+rootProject.name = "BakingBot"
 

@@ -1,4 +1,5 @@
-settings.properties
+/settings.properties
+*.db
 # Project exclude paths
 /.gradle/
 /build/
