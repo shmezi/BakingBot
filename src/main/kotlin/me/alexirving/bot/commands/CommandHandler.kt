@@ -17,10 +17,11 @@ class CommandHandler : ListenerAdapter() {
 
     }
 
-    fun register(name: String, command: Command) {
-        if (!commandMap.containsKey(name))
+    fun register(name: String, command: Command): CommandHandler {
+        if (!commandMap.containsKey(name)) {
             commandMap[name] = command
-        else throw CommandAlreadyExistsException("Command '$name' is already registered!")
+            return this
+        } else throw CommandAlreadyExistsException("Command '$name' is already registered!")
     }
 
     fun updateGuild(g: Guild) {

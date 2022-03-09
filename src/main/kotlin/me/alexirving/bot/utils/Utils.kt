@@ -19,7 +19,10 @@ import java.nio.file.StandardCopyOption
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.ResultSet
+import java.util.*
+import java.util.regex.Pattern
 import javax.imageio.ImageIO
+import kotlin.concurrent.schedule
 
 
 object Utils {
@@ -79,12 +82,44 @@ object Utils {
     fun generateQr(data: String): ByteArray = generateQr(data, 250, 250)
 
     fun decodeQRCode(qrImg: InputStream?): String? {
-        (qrImg ?: return null) .use {
+        (qrImg ?: return null).use {
             val result =
                 MultiFormatReader().decode(BinaryBitmap(HybridBinarizer(BufferedImageLuminanceSource(ImageIO.read(qrImg)))))
             return result.text
         }
     }
 
+
+    private val durValid = Pattern.compile("^(\\d+)(y|mo|w|d|h|mi|s|ms)?\$")
+    fun String.toTime(): Long? {
+        val v = durValid.matcher(this.lowercase())
+        if (!v.matches())
+            return null
+        val multiplier = if (v.groupCount() == 2) {
+            when (v.group(2)) {
+                "y" -> 31557600L
+                "mo" -> 2629800L
+                "w" -> 604800L
+                "d" -> 86400L
+                "h" -> 3600L
+                "mi" -> 60
+                "s" -> 1000L
+                "ms" -> 1L
+                else -> 1000L
+            }
+        } else
+            1000L
+        return (multiplier * v.group(1).toInt())
+    }
+
+    fun repeatTill(length: Long, stop: Boolean, toRun: () -> Unit) {
+        Timer().schedule(length) {
+            if (!stop) {
+                toRun()
+                repeatTill(length, stop, toRun)
+            }
+        }
+
+    }
 
 }

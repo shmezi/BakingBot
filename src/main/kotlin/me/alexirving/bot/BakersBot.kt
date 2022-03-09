@@ -1,10 +1,8 @@
 package me.alexirving.bot
 
 import me.alexirving.bot.commands.CommandHandler
-import me.alexirving.bot.commands.cmds.Analyze
-import me.alexirving.bot.commands.cmds.Attend
-import me.alexirving.bot.commands.cmds.Event
-import me.alexirving.bot.commands.cmds.Submit
+import me.alexirving.bot.commands.cmds.*
+import me.alexirving.bot.commands.mod.*
 import me.alexirving.bot.events.GuildReady
 import me.alexirving.bot.events.SelectionListener
 import me.alexirving.bot.utils.Utils.copyOver
@@ -29,11 +27,16 @@ fun main() {
     settings.load(FileInputStream("settings.properties"))
     jda = JDABuilder.createDefault(settings.getProperty("TOKEN")).build()
 
-
     ch.register("attend", Attend())
-    ch.register("event", Event())
-    ch.register("submit", Submit())
-    ch.register("analyze", Analyze())
+        .register("event", Event())
+        .register("submit", Submit())
+        .register("analyze", Analyze())
+        .register("timer", SetTimer())
+        .register("clear", Clear())
+        .register("ban", Ban())
+        .register("kick", Kick())
+        .register("mute", Mute())
+        .register("unmute", UnMute())
     jda.addEventListener(ch, GuildReady(ch), SelectionListener())
 
 }
