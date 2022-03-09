@@ -1,11 +1,13 @@
 package me.alexirving.bot
 
 import me.alexirving.bot.commands.CommandHandler
+import me.alexirving.bot.commands.cmds.Analyze
 import me.alexirving.bot.commands.cmds.Attend
 import me.alexirving.bot.commands.cmds.Event
+import me.alexirving.bot.commands.cmds.Submit
 import me.alexirving.bot.events.GuildReady
-import me.alexirving.bot.utils.copyOver
-import me.alexirving.bot.utils.psExec
+import me.alexirving.bot.events.SelectionListener
+import me.alexirving.bot.utils.Utils.copyOver
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
 import java.io.FileInputStream
@@ -18,7 +20,7 @@ fun main() {
     /**
      * Setup
      */
-    copyOver("settings.properties", "sqlite.properties")
+    copyOver("settings.properties")
 
     /**
      * General code
@@ -30,7 +32,9 @@ fun main() {
 
     ch.register("attend", Attend())
     ch.register("event", Event())
-    jda.addEventListener(ch, GuildReady(ch))
+    ch.register("submit", Submit())
+    ch.register("analyze", Analyze())
+    jda.addEventListener(ch, GuildReady(ch), SelectionListener())
 
 }
 
